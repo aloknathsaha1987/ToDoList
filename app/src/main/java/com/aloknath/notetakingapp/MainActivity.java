@@ -62,10 +62,19 @@ public class MainActivity extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_create) {
-            createNote();
-            return true;
+        switch (id){
+            case R.id.action_create:
+                createNote();
+                break;
+            case R.id.action_calender:
+                Intent intent = new Intent(this, CalenderActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+
         }
+
 
         return super.onOptionsItemSelected(item);
     }

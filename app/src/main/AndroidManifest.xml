@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".NoteEditorActivity" android:configChanges="orientation|screenSize"/>
+        <activity android:name=".CalenderActivity" android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>
