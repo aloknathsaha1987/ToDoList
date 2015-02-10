@@ -37,7 +37,8 @@ public class CalenderActivity extends Activity {
                 SimpleDateFormat formatter = new SimpleDateFormat(pattern);
                 String key = formatter.format(date);
                 Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(CalenderActivity.this, MainActivity.class);
+                Intent intent = new Intent(CalenderActivity.this, DayBreakDownActivity.class);
+                intent.putExtra("Day_Table", key);
                 startActivity(intent);
             }
 
@@ -46,13 +47,5 @@ public class CalenderActivity extends Activity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-        }
-        return false;
     }
 }

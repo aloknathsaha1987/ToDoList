@@ -11,6 +11,25 @@ public class NoteItem {
 
     private String key;
     private String text;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    private String location;
 
     public String getKey() {
         return key;
@@ -39,6 +58,21 @@ public class NoteItem {
         NoteItem note = new NoteItem();
         note.setKey(key);
         note.setText("");
+
+        return note;
+    }
+
+    public static NoteItem getNew(int i){
+        Locale locale = new Locale("en_US");
+        Locale.setDefault(locale);
+
+        String pattern = "MM-dd-yyyy";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        String key = formatter.format(new Date());
+
+        NoteItem note = new NoteItem();
+        note.setKey(String.valueOf(i));
+        note.setText("Hour" + i);
 
         return note;
     }
