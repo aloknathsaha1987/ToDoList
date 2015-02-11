@@ -1,53 +1,37 @@
 package com.aloknath.notetakingapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ALOKNATH on 2/9/2015.
+ * Created by ALOKNATH on 2/11/2015.
  */
-public class NoteEditorActivity extends Activity {
+public class CreateNewNoteActivity extends NoteEditorActivity {
 
-    private NoteItem note;
+    private NoteItem item;
     private DateDataSource dataSource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
         dataSource = new DateDataSource(this);
         dataSource.open();
         Intent intent = this.getIntent();
-        note = new NoteItem();
-        note.setKey(intent.getStringExtra("key"));
-        note.setText(intent.getStringExtra("text"));
-
+        item = new NoteItem();
+        item.setKey(intent.getStringExtra("key"));
+        item.setText(intent.getStringExtra("text"));
         EditText editText = (EditText)findViewById(R.id.noteText);
-        editText.setText(note.getText());
-        //editText.setSelection(note.getText().length());
-    }
-
-    public void saveAndFinish(){
-        EditText editText = (EditText)findViewById(R.id.noteText);
-        String noteText = editText.getText().toString();
-        Intent intent = new Intent();
-        intent.putExtra("key", note.getKey());
-        intent.putExtra("text",noteText);
-        setResult(RESULT_OK, intent);
-        note.setText(noteText);
-        dataSource.updateDayItems(note);
-        dataSource.close();
-        finish();
+        editText.setText(item.getText());
+        //Toast.makeText(this, "Weird: " + item.getKey() , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -70,13 +54,26 @@ public class NoteEditorActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            saveAndFinish();
+            saveToDbAndFinish();
         }
         return false;
     }
 
+    private void saveToDbAndFinish() {
+
+        EditText editText = (EditText)findViewById(R.id.noteText);
+        String noteText = editText.getText().toString();
+        item.setText(noteText);
+        dataSource.addDayItems(item);
+        dataSource.close();
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
-        saveAndFinish();
+        saveToDbAndFinish();
     }
+
 }

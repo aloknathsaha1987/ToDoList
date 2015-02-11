@@ -42,6 +42,7 @@ public class DateDataSource {
     public boolean addDayItems(NoteItem note){
 
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(DateDbOpenHelper.DATE_ID, note.getKey());
         contentValues.put(DateDbOpenHelper.TIME, note.getText());
@@ -78,11 +79,11 @@ public class DateDataSource {
 
     }
 
-    public List<NoteItem> getDayItenary(String particularDayTable){
+    public List<NoteItem> getDayItenary(String particularDay){
 
         sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DateDbOpenHelper.TABLENAME +
-                        " WHERE date_id like '%" + particularDayTable + "%'", null);
+                        " WHERE date_id like '%" + particularDay + "%'", null);
 //
 //        Cursor cursor = sqLiteDatabase.query(particularDayTable, allColumns,
 //                null, null, null, null,null);
