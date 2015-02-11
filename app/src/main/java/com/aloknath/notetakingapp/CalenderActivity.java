@@ -54,6 +54,8 @@ public class CalenderActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
             finish();
         }
         return false;

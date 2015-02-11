@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.data.NotesDailyDataSource;
@@ -54,7 +52,7 @@ public class DayBreakDownActivity extends ListActivity {
 
                     NoteItem note = new NoteItem();
                     note.setKey(day_Table_ID);
-                    note.setText("Testing123");
+                    note.setText("Enter Text");
                     note.setDescription("Jersey City Meeting");
                     note.setLocation("65 Saint Pauls Avenue");
 
@@ -122,6 +120,7 @@ public class DayBreakDownActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        dataSource = new DateDataSource(DayBreakDownActivity.this);
         dataSource.open();
     }
 
