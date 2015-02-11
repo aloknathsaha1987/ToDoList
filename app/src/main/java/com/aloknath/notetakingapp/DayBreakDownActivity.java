@@ -5,19 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.data.NotesDailyDataSource;
-import com.aloknath.notetakingapp.data.NotesDataSource;
 import com.aloknath.notetakingapp.database.DateDataSource;
-
-import org.apache.commons.logging.Log;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ALOKNATH on 2/10/2015.
@@ -26,45 +21,43 @@ public class DayBreakDownActivity extends ListActivity {
 
     private NotesDailyDataSource hourlyDataSource;
     private List<NoteItem> notesList = new ArrayList<NoteItem>();
-    DateDataSource dataSource;
+    private DateDataSource dataSource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         final String day_Table_ID;
+        final boolean found;
 
         Intent intent = this.getIntent();
-        Map<String, String> dayStore = new HashMap<String, String>();
-        dayStore.put(intent.getStringExtra("Day_Table"), "NewTable");
-        day_Table_ID = dayStore.get(intent.getStringExtra("Day_Table"));
-        dataSource = new DateDataSource(this, day_Table_ID);
-        dataSource.open();
+        day_Table_ID = "TableNo"+ intent.getStringExtra("Day_Table");
 
         hourlyDataSource = new NotesDailyDataSource(this);
+        found = hourlyDataSource.setTableName("TableNo"+ intent.getStringExtra("Day_Table"));
+
+        dataSource = new DateDataSource(this);
+        dataSource.open();
 
         new Thread(){
             public void run(){
-                boolean found;
-                found = hourlyDataSource.setTableName(day_Table_ID);
+
                 if(found){
-                    android.util.Log.i("found table","Table Found and hence not Created");
                     notesList = dataSource.getDayItenary(day_Table_ID);
                     dataSource.close();
                     refreshDisplay();
 
                 }else{
-                    android.util.Log.i( "Not found","Table Not Found and hence Created");
+
                     NoteItem note = new NoteItem();
-                    note.setKey("One");
-                    note.setText("Time");
+                    note.setKey(day_Table_ID);
+                    note.setText("Testing123");
                     note.setDescription("Jersey City Meeting");
                     note.setLocation("65 Saint Pauls Avenue");
                     dataSource.addDayItems(note);
                     notesList = dataSource.getDayItenary(day_Table_ID);
                     dataSource.close();
                     refreshDisplay();
-                    //Create a new table in the database
                 }
             }
         }.start();
@@ -77,6 +70,25 @@ public class DayBreakDownActivity extends ListActivity {
 //        }
 //
 //        refreshDisplay();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataSource.open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataSource.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dataSource.close();
     }
 
     private void refreshDisplay() {

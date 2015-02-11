@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DateDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "to_do_test@1.db";
+    private static final String DATABASENAME = "to_do_test@3.db";
     private static final int DATABASE_VERSION =1;
 
     public static final String DATE_ID = "date_id";
@@ -17,17 +17,15 @@ public class DateDbOpenHelper extends SQLiteOpenHelper {
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
 
-    private String tableName;
-    private String dayTable;
+    public static final String TABLENAME = "ToDoTasks_Table";
+    private String dayTable ="CREATE TABLE IF NOT EXISTS " + TABLENAME + "( " +
+            DATE_ID + " TEXT PRIMARY KEY, " +
+            TIME + " TEXT, " +
+            DESCRIPTION + " TEXT, " +
+            LOCATION + " TEXT " + ")";
 
-    public DateDbOpenHelper(Context context, String name) {
+    public DateDbOpenHelper(Context context) {
         super(context, DATABASENAME, null, DATABASE_VERSION);
-        this.tableName = name;
-        dayTable ="CREATE TABLE IF NOT EXISTS " + tableName + "( " +
-                 DATE_ID + " TEXT, " +
-                 TIME + " TEXT, " +
-                 DESCRIPTION + " TEXT, " +
-                 LOCATION + " TEXT " + ")";
 
     }
 

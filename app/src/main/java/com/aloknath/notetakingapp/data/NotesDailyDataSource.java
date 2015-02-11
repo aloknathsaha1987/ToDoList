@@ -15,37 +15,39 @@ import java.util.TreeSet;
  */
 public class NotesDailyDataSource {
 
-    private static final String DAY_PREFKEY = "daily_notes" ;
+    private static final String TABLE_PREFKEY = "table_names" ;
     private SharedPreferences noteDayPrefs;
 
-
     public NotesDailyDataSource(Context context){
-        noteDayPrefs = context.getSharedPreferences(DAY_PREFKEY, context.MODE_PRIVATE);
+        noteDayPrefs = context.getSharedPreferences(TABLE_PREFKEY, context.MODE_PRIVATE);
 
     }
 
     public boolean setTableName(String day_table_id) {
-        boolean found = false;
+
         Map<String,?> notesMap = noteDayPrefs.getAll();
         SortedSet<String> keys = new TreeSet<String>(notesMap.keySet());
-        if (keys.size() == 0){
+
+        if (keys.isEmpty()){
             SharedPreferences.Editor editor = noteDayPrefs.edit();
             editor.putString(day_table_id, "Table_Created");
             editor.commit();
+            return false;
 
         }else
         {
             for (String key: keys){
-                if(key == day_table_id){
-                    found = true;
+                if(key.equals(day_table_id)){
+                   return true;
                 }
             }
-            if (!found){
-                SharedPreferences.Editor editor = noteDayPrefs.edit();
-                editor.putString(day_table_id, "Table_Created");
-                editor.commit();
-            }
+            SharedPreferences.Editor editor = noteDayPrefs.edit();
+            editor.putString(day_table_id, "Table_Created");
+            editor.commit();
+            return false;
+
         }
-        return found;
+
     }
+
 }

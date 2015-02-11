@@ -11,6 +11,8 @@ import com.squareup.timessquare.CalendarPickerView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by ALOKNATH on 2/9/2015.
@@ -36,7 +38,8 @@ public class CalenderActivity extends Activity {
                 String pattern = "MM-dd-yyyy";
                 SimpleDateFormat formatter = new SimpleDateFormat(pattern);
                 String key = formatter.format(date);
-                Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
+                key = key.replace("-","");
+//                Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(CalenderActivity.this, DayBreakDownActivity.class);
                 intent.putExtra("Day_Table", key);
                 startActivity(intent);
@@ -48,4 +51,5 @@ public class CalenderActivity extends Activity {
             }
         });
     }
+
 }

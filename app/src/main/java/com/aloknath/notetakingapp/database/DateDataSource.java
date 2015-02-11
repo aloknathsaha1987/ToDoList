@@ -19,7 +19,6 @@ public class DateDataSource {
 
     SQLiteOpenHelper sqLiteOpenHelper;
     SQLiteDatabase sqLiteDatabase;
-    private String table_name;
 
     public static final String[] allColumns =
             {DateDbOpenHelper.DATE_ID,
@@ -27,10 +26,8 @@ public class DateDataSource {
              DateDbOpenHelper.DESCRIPTION,
              DateDbOpenHelper.LOCATION};
 
-    public DateDataSource(Context context
-            , String name){
-        this.table_name = name;
-        sqLiteOpenHelper = new DateDbOpenHelper(context, name);
+    public DateDataSource(Context context){
+        sqLiteOpenHelper = new DateDbOpenHelper(context);
 
     }
 
@@ -44,19 +41,51 @@ public class DateDataSource {
 
     public boolean addDayItems(NoteItem note){
 
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DateDbOpenHelper.DATE_ID, note.getKey());
         contentValues.put(DateDbOpenHelper.TIME, note.getText());
         contentValues.put(DateDbOpenHelper.DESCRIPTION, note.getDescription());
         contentValues.put(DateDbOpenHelper.LOCATION, note.getLocation());
 
-        long insertId = sqLiteDatabase.insert(table_name, null, contentValues);
+        long insertId = sqLiteDatabase.insert(DateDbOpenHelper.TABLENAME, null, contentValues);
         return (insertId != -1);
     }
 
+    public int updateDayItems(NoteItem note){
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+//        contentValues.put(DateDbOpenHelper.DATE_ID, note.getKey());
+        contentValues.put(DateDbOpenHelper.TIME, note.getText());
+        contentValues.put(DateDbOpenHelper.DESCRIPTION, note.getDescription());
+        contentValues.put(DateDbOpenHelper.LOCATION, note.getLocation());
+
+//        String[] args = { note.getKey() };
+//        String query =
+//                "UPDATE " + DateDbOpenHelper.TABLENAME
+//                        + " SET "   + DateDbOpenHelper.TIME + " = " + timeText
+//                        + " WHERE " + DateDbOpenHelper.DATE_ID +"=?";
+//
+//        Cursor cu = sqLiteDatabase.rawQuery( query, args);
+//        cu.moveToFirst();
+//        cu.close();
+//
+        return sqLiteDatabase.update(DateDbOpenHelper.TABLENAME, contentValues,
+                DateDbOpenHelper.DATE_ID + " = ?",
+                new String[] { note.getKey() });
+
+    }
+
     public List<NoteItem> getDayItenary(String particularDayTable){
-        Cursor cursor = sqLiteDatabase.query(particularDayTable, allColumns,
-                null, null, null, null,null);
+
+        sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DateDbOpenHelper.TABLENAME +
+                        " WHERE date_id like '%" + particularDayTable + "%'", null);
+//
+//        Cursor cursor = sqLiteDatabase.query(particularDayTable, allColumns,
+//                null, null, null, null,null);
         List<NoteItem> noteItems = cursorToList(cursor);
         return noteItems;
     }
