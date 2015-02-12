@@ -34,7 +34,7 @@ public class DayItemAdapter extends ArrayAdapter<NoteItem> {
         View view = inflater.inflate(R.layout.activity_note_editor, parent, false);
         NoteItem note = noteItems.get(position);
         EditText editText = (EditText)view.findViewById(R.id.titleText);
-        editText.setText(note.getTime());
+        editText.setText(note.getTitle());
         return super.getView(position, convertView, parent);
     }
 }

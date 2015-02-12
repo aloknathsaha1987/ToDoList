@@ -74,10 +74,11 @@ public class DateDataSource {
 //        Cursor cu = sqLiteDatabase.rawQuery( query, args);
 //        cu.moveToFirst();
 //        cu.close();
-//
+//      this.db.update(ENTRY_TABLE, args, ("message = ? AND username = "+user), new String[] {og});
+
         return sqLiteDatabase.update(DateDbOpenHelper.TABLENAME, contentValues,
-                DateDbOpenHelper.DATE_ID + " = ?",
-                new String[] { note.getKey() });
+                DateDbOpenHelper.DATE_ID + " = ? AND " + DateDbOpenHelper.TITLE + " = ? ",
+                new String[] { note.getKey(), note.getTitle() });
 
     }
 
@@ -112,4 +113,12 @@ public class DateDataSource {
     }
 
 
+    public int removeFromList(NoteItem note) {
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        return sqLiteDatabase.delete(DateDbOpenHelper.TABLENAME,
+                DateDbOpenHelper.DATE_ID + " = ? AND " + DateDbOpenHelper.TITLE + " = ? ",
+                new String[] { note.getKey(), note.getTitle() });
+    }
 }

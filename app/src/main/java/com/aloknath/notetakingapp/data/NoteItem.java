@@ -90,6 +90,6 @@ public class NoteItem {
 
     @Override
     public String toString() {
-        return this.getTime();
+        return this.getTitle();
     }
 }

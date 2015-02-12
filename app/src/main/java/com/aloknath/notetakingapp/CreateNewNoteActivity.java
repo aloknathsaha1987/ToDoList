@@ -50,7 +50,7 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveAndFinish();
+                saveToDbAndFinish();
             }
         });
 

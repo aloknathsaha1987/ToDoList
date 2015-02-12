@@ -22,7 +22,7 @@ import java.util.List;
 public class MainActivity extends ListActivity {
 
     public static final int EDITOR_ACTIVITY_REQUEST = 1001;
-    private static final int MENU_DELETE_ID = 1002;
+    public static final int MENU_DELETE_ID = 1002;
     private static final int CALENDER_ACTIVITY_REQUEST = 1003;
     private int currentNoteId;
    // private NotesDataSource dataSource;
@@ -156,7 +156,7 @@ public class MainActivity extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
         if(item.getItemId() == MENU_DELETE_ID){
             NoteItem note = notesList.get(currentNoteId);
-            //dataSource.removeFromList(note);
+            todayDataSource.removeFromList(note);
             refreshDisplay();
         }
         return super.onContextItemSelected(item);

@@ -3,9 +3,11 @@ package com.aloknath.notetakingapp;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
 import com.aloknath.notetakingapp.data.NoteItem;
@@ -22,12 +24,14 @@ public class DayBreakDownActivity extends ListActivity {
     private NotesDailyDataSource hourlyDataSource;
     private List<NoteItem> notesList = new ArrayList<NoteItem>();
     private DateDataSource dataSource;
+    private int currentNoteId;
     private String dayId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerForContextMenu(getListView());
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String day_Table_ID;
@@ -100,6 +104,23 @@ public class DayBreakDownActivity extends ListActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        currentNoteId = (int) info.id;
+        menu.add(0, MainActivity.MENU_DELETE_ID, 0, "Delete");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if(item.getItemId() == MainActivity.MENU_DELETE_ID){
+            NoteItem note = notesList.get(currentNoteId);
+            dataSource.removeFromList(note);
+            refreshDisplay();
+        }
+        return super.onContextItemSelected(item);
     }
 
     private void createNote() {
