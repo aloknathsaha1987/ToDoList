@@ -62,7 +62,7 @@ public class MainActivity extends ListActivity {
         setListAdapter(adapter);
     }
 
-
+    // Commit
     @Override
     protected void onResume() {
         super.onResume();
