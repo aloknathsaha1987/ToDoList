@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ALOKNATH on 2/9/2015.
@@ -30,21 +28,69 @@ public class NoteEditorActivity extends Activity {
         Intent intent = this.getIntent();
         note = new NoteItem();
         note.setKey(intent.getStringExtra("key"));
-        note.setText(intent.getStringExtra("text"));
+        note.setTime(intent.getStringExtra("time"));
+        note.setTitle(intent.getStringExtra("title"));
+        note.setDescription(intent.getStringExtra("description"));
+        note.setLocation(intent.getStringExtra("location"));
 
-        EditText editText = (EditText)findViewById(R.id.noteText);
-        editText.setText(note.getText());
-        //editText.setSelection(note.getText().length());
+        EditText editText = (EditText)findViewById(R.id.titleText);
+        editText.setText(note.getTitle());
+
+        editText = (EditText)findViewById(R.id.titleDescription);
+        editText.setText(note.getDescription());
+
+        editText = (EditText)findViewById(R.id.titleLocation);
+        editText.setText(note.getLocation());
+
+        editText = (EditText)findViewById(R.id.titleTime);
+        editText.setText(note.getTime());
+
+        Button save = (Button)findViewById(R.id.save_button);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAndFinish();
+            }
+        });
+
+        Button cancel = (Button)findViewById(R.id.cancel_button);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        //editText.setSelection(note.getTime().length());
     }
 
     public void saveAndFinish(){
-        EditText editText = (EditText)findViewById(R.id.noteText);
-        String noteText = editText.getText().toString();
+
         Intent intent = new Intent();
         intent.putExtra("key", note.getKey());
-        intent.putExtra("text",noteText);
+
+        EditText editText = (EditText)findViewById(R.id.titleText);
+        String noteText = editText.getText().toString();
+        intent.putExtra("title",noteText);
+        note.setTitle(noteText);
+
+        editText = (EditText)findViewById(R.id.titleTime);
+        noteText = editText.getText().toString();
+        intent.putExtra("time",noteText);
+        note.setTime(noteText);
+
+        editText = (EditText)findViewById(R.id.titleDescription);
+        noteText = editText.getText().toString();
+        intent.putExtra("description",noteText);
+        note.setDescription(noteText);
+
+        editText = (EditText)findViewById(R.id.titleLocation);
+        noteText = editText.getText().toString();
+        intent.putExtra("location",noteText);
+        note.setLocation(noteText);
+
         setResult(RESULT_OK, intent);
-        note.setText(noteText);
+
         dataSource.updateDayItems(note);
         dataSource.close();
         finish();

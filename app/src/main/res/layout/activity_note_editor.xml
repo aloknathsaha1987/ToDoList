@@ -1,16 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/noteText"
-        android:ems="10"
-        android:singleLine="false"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        />
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-</RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Title"
+            android:gravity="center"
+            android:id="@+id/task_title"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/titleText"
+            android:ems="10"
+            android:singleLine="false"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/task_title"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Description"
+            android:gravity="center"
+            android:id="@+id/task_description"
+            android:textSize="20sp"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/titleText"
+            />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:id="@+id/titleDescription"
+            android:ems="10"
+            android:singleLine="false"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/task_description"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Location"
+            android:gravity="center"
+            android:id="@+id/task_location"
+            android:textSize="20sp"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/titleDescription"
+            />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/titleLocation"
+            android:ems="10"
+            android:singleLine="false"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/task_location"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Time"
+            android:gravity="center"
+            android:id="@+id/task_time"
+            android:textSize="20sp"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/titleLocation"
+            />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/titleTime"
+            android:ems="10"
+            android:singleLine="false"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/task_time"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/save_button"
+            android:layout_below="@+id/titleTime"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="100dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancel_button"
+            android:layout_below="@+id/titleTime"
+            android:layout_marginTop="20dp"
+            android:layout_alignLeft="@+id/save_button"
+            android:layout_marginLeft="100dp"/>
+
+    </RelativeLayout>
+
+</ScrollView>

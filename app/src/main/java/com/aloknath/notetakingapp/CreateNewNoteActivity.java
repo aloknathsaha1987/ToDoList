@@ -3,11 +3,12 @@ package com.aloknath.notetakingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
-import java.util.List;
 
 /**
  * Created by ALOKNATH on 2/11/2015.
@@ -28,9 +29,38 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
         Intent intent = this.getIntent();
         item = new NoteItem();
         item.setKey(intent.getStringExtra("key"));
-        item.setText(intent.getStringExtra("text"));
-        EditText editText = (EditText)findViewById(R.id.noteText);
-        editText.setText(item.getText());
+        item.setTime(intent.getStringExtra("time"));
+        item.setTitle(intent.getStringExtra("title"));
+        item.setDescription(intent.getStringExtra("description"));
+        item.setLocation(intent.getStringExtra("location"));
+
+        EditText editText = (EditText)findViewById(R.id.titleText);
+        editText.setText(item.getTitle());
+
+        editText = (EditText)findViewById(R.id.titleDescription);
+        editText.setText(item.getDescription());
+
+        editText = (EditText)findViewById(R.id.titleLocation);
+        editText.setText(item.getLocation());
+
+        editText = (EditText)findViewById(R.id.titleTime);
+        editText.setText(item.getTime());
+
+        Button save = (Button)findViewById(R.id.save_button);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveAndFinish();
+            }
+        });
+
+        Button cancel = (Button)findViewById(R.id.cancel_button);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         //Toast.makeText(this, "Weird: " + item.getKey() , Toast.LENGTH_SHORT).show();
     }
 
@@ -61,9 +91,23 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
 
     private void saveToDbAndFinish() {
 
-        EditText editText = (EditText)findViewById(R.id.noteText);
+        EditText editText = (EditText)findViewById(R.id.titleTime);
         String noteText = editText.getText().toString();
-        item.setText(noteText);
+        item.setTime(noteText);
+
+        editText = (EditText)findViewById(R.id.titleText);
+        noteText = editText.getText().toString();
+        item.setTitle(noteText);
+
+        editText = (EditText)findViewById(R.id.titleDescription);
+        noteText = editText.getText().toString();
+        item.setDescription(noteText);
+
+        editText = (EditText)findViewById(R.id.titleLocation);
+        noteText = editText.getText().toString();
+        item.setLocation(noteText);
+
+
         dataSource.addDayItems(item);
         dataSource.close();
         Intent intent = new Intent();

@@ -2,17 +2,14 @@ package com.aloknath.notetakingapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.aloknath.notetakingapp.NoteEditorActivity;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.data.NoteItem;
-import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.util.List;
 
@@ -36,8 +33,8 @@ public class DayItemAdapter extends ArrayAdapter<NoteItem> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.activity_note_editor, parent, false);
         NoteItem note = noteItems.get(position);
-        EditText editText = (EditText)view.findViewById(R.id.noteText);
-        editText.setText(note.getText());
+        EditText editText = (EditText)view.findViewById(R.id.titleText);
+        editText.setText(note.getTime());
         return super.getView(position, convertView, parent);
     }
 }

@@ -52,9 +52,10 @@ public class DayBreakDownActivity extends ListActivity {
 
                     NoteItem note = new NoteItem();
                     note.setKey(day_Table_ID);
-                    note.setText("Enter Text");
-                    note.setDescription("Jersey City Meeting");
-                    note.setLocation("65 Saint Pauls Avenue");
+                    note.setTitle("Enter Title");
+                    note.setTime("Enter Time");
+                    note.setDescription("Enter Description");
+                    note.setLocation("Enter Location");
 
                     dataSource = new DateDataSource(DayBreakDownActivity.this);
                     dataSource.open();
@@ -105,7 +106,10 @@ public class DayBreakDownActivity extends ListActivity {
         NoteItem note = NoteItem.getNew();
         Intent intent = new Intent(this, CreateNewNoteActivity.class);
         intent.putExtra("key", dayId);
-        intent.putExtra("Enter text",note.getText());
+        intent.putExtra("time",note.getTime());
+        intent.putExtra("title",note.getTitle());
+        intent.putExtra("description",note.getDescription());
+        intent.putExtra("location",note.getLocation());
         startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
     }
 
@@ -153,7 +157,10 @@ public class DayBreakDownActivity extends ListActivity {
         NoteItem note = notesList.get(position);
         Intent intent = new Intent(this, NoteEditorActivity.class);
         intent.putExtra("key", note.getKey());
-        intent.putExtra("text",note.getText());
+        intent.putExtra("time",note.getTime());
+        intent.putExtra("title",note.getTitle());
+        intent.putExtra("description",note.getDescription());
+        intent.putExtra("location",note.getLocation());
         startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
     }
 

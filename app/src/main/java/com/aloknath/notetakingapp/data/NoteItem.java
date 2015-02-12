@@ -10,8 +10,18 @@ import java.util.Locale;
 public class NoteItem {
 
     private String key;
-    private String text;
+    private String time;
     private String description;
+    private String location;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getDescription() {
         return description;
@@ -29,8 +39,6 @@ public class NoteItem {
         this.location = location;
     }
 
-    private String location;
-
     public String getKey() {
         return key;
     }
@@ -39,12 +47,12 @@ public class NoteItem {
         this.key = key;
     }
 
-    public String getText() {
-        return text;
+    public String getTime() {
+        return time;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public static NoteItem getNew(){
@@ -57,7 +65,10 @@ public class NoteItem {
 
         NoteItem note = new NoteItem();
         note.setKey(key);
-        note.setText("");
+        note.setTime("Enter Time");
+        note.setTitle("Enter Task");
+        note.setDescription("Enter Task Description");
+        note.setLocation("Enter Task Location");
 
         return note;
     }
@@ -72,13 +83,13 @@ public class NoteItem {
 
         NoteItem note = new NoteItem();
         note.setKey(String.valueOf(i));
-        note.setText("Hour" + i);
+        note.setTime("Hour" + i);
 
         return note;
     }
 
     @Override
     public String toString() {
-        return this.getText();
+        return this.getTime();
     }
 }

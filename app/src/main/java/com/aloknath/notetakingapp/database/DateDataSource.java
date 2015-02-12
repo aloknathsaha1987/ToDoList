@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.aloknath.notetakingapp.data.NoteItem;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +21,7 @@ public class DateDataSource {
 
     public static final String[] allColumns =
             {DateDbOpenHelper.DATE_ID,
+             DateDbOpenHelper.TITLE,
              DateDbOpenHelper.TIME,
              DateDbOpenHelper.DESCRIPTION,
              DateDbOpenHelper.LOCATION};
@@ -45,7 +45,8 @@ public class DateDataSource {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DateDbOpenHelper.DATE_ID, note.getKey());
-        contentValues.put(DateDbOpenHelper.TIME, note.getText());
+        contentValues.put(DateDbOpenHelper.TITLE, note.getTitle());
+        contentValues.put(DateDbOpenHelper.TIME, note.getTime());
         contentValues.put(DateDbOpenHelper.DESCRIPTION, note.getDescription());
         contentValues.put(DateDbOpenHelper.LOCATION, note.getLocation());
 
@@ -59,7 +60,8 @@ public class DateDataSource {
 
         ContentValues contentValues = new ContentValues();
 //        contentValues.put(DateDbOpenHelper.DATE_ID, note.getKey());
-        contentValues.put(DateDbOpenHelper.TIME, note.getText());
+        contentValues.put(DateDbOpenHelper.TIME, note.getTime());
+        contentValues.put(DateDbOpenHelper.TITLE, note.getTitle());
         contentValues.put(DateDbOpenHelper.DESCRIPTION, note.getDescription());
         contentValues.put(DateDbOpenHelper.LOCATION, note.getLocation());
 
@@ -98,7 +100,8 @@ public class DateDataSource {
             while (cursor.moveToNext()){
                 NoteItem noteItem = new NoteItem();
                 noteItem.setKey(cursor.getString(cursor.getColumnIndex(DateDbOpenHelper.DATE_ID)));
-                noteItem.setText(cursor.getString(cursor.getColumnIndex(DateDbOpenHelper.TIME)));
+                noteItem.setTitle(cursor.getString(cursor.getColumnIndex(DateDbOpenHelper.TITLE)));
+                noteItem.setTime(cursor.getString(cursor.getColumnIndex(DateDbOpenHelper.TIME)));
                 noteItem.setDescription(cursor.getString(cursor.getColumnIndex(DateDbOpenHelper.DESCRIPTION)));
                 noteItem.setLocation(cursor.getString(cursor.getColumnIndex(DateDbOpenHelper.LOCATION)));
                 noteItems.add(noteItem);

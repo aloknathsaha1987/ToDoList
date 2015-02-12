@@ -9,10 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DateDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "to_do_test@7.db";
+    private static final String DATABASENAME = "to_do_test@8.db";
     private static final int DATABASE_VERSION =1;
 
     public static final String DATE_ID = "date_id";
+    public static final String TITLE = "task_title";
     public static final String TIME = "time";
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
@@ -21,6 +22,7 @@ public class DateDbOpenHelper extends SQLiteOpenHelper {
     private String dayTable ="CREATE TABLE IF NOT EXISTS " + TABLENAME + "( " +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             DATE_ID + " TEXT, " +
+            TITLE + " TEXT, " +
             TIME + " TEXT, " +
             DESCRIPTION + " TEXT, " +
             LOCATION + " TEXT " + ")";

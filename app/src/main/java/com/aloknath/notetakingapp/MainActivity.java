@@ -1,6 +1,5 @@
 package com.aloknath.notetakingapp;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +10,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.aloknath.notetakingapp.data.NoteItem;
-import com.aloknath.notetakingapp.data.NotesDailyDataSource;
-import com.aloknath.notetakingapp.data.NotesDataSource;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.SimpleDateFormat;
@@ -121,7 +117,10 @@ public class MainActivity extends ListActivity {
         NoteItem note = NoteItem.getNew();
         Intent intent = new Intent(this, CreateNewNoteActivity.class);
         intent.putExtra("key", dayId);
-        intent.putExtra("Enter text",note.getText());
+        intent.putExtra("time",note.getTime());
+        intent.putExtra("title",note.getTitle());
+        intent.putExtra("description",note.getDescription());
+        intent.putExtra("location",note.getLocation());
         startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
     }
 
@@ -130,7 +129,10 @@ public class MainActivity extends ListActivity {
         NoteItem note = notesList.get(position);
         Intent intent = new Intent(this, NoteEditorActivity.class);
         intent.putExtra("key", note.getKey());
-        intent.putExtra("text",note.getText());
+        intent.putExtra("time",note.getTime());
+        intent.putExtra("title",note.getTitle());
+        intent.putExtra("description",note.getDescription());
+        intent.putExtra("location",note.getLocation());
         startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
     }
 

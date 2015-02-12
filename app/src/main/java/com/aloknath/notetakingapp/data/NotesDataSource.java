@@ -2,8 +2,6 @@ package com.aloknath.notetakingapp.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,7 @@ public class NotesDataSource {
         for(String key:keys){
             NoteItem note = new NoteItem();
             note.setKey(key);
-            note.setText((String) notesMap.get(key));
+            note.setTime((String) notesMap.get(key));
             noteList.add(note);
         }
         return  noteList;
@@ -45,7 +43,7 @@ public class NotesDataSource {
     public boolean updateList(NoteItem note){
 
         SharedPreferences.Editor editor = notePrefs.edit();
-        editor.putString(note.getKey(), note.getText());
+        editor.putString(note.getKey(), note.getTime());
         editor.commit();
         return  true;
     }
