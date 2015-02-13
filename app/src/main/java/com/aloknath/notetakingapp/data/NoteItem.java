@@ -73,21 +73,6 @@ public class NoteItem {
         return note;
     }
 
-    public static NoteItem getNew(int i){
-        Locale locale = new Locale("en_US");
-        Locale.setDefault(locale);
-
-        String pattern = "MM-dd-yyyy";
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-        String key = formatter.format(new Date());
-
-        NoteItem note = new NoteItem();
-        note.setKey(String.valueOf(i));
-        note.setTime("Hour" + i);
-
-        return note;
-    }
-
     @Override
     public String toString() {
         return this.getTitle();

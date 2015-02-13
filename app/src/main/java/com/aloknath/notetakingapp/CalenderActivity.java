@@ -39,7 +39,7 @@ public class CalenderActivity extends Activity {
                 SimpleDateFormat formatter = new SimpleDateFormat(pattern);
                 String key = formatter.format(date);
                 key = key.replace("-","");
-//                Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
+                //Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(CalenderActivity.this, DayBreakDownActivity.class);
                 intent.putExtra("Day_Table", key);
                 startActivity(intent);

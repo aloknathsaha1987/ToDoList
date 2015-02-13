@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DateDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "to_do_test@9.db";
+    private static final String DATABASENAME = "to_do_test@1_2.db";
     private static final int DATABASE_VERSION =1;
 
     public static final String DATE_ID = "date_id";

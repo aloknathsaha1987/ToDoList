@@ -9,11 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.data.NotesDailyDataSource;
 import com.aloknath.notetakingapp.database.DateDataSource;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -126,7 +131,12 @@ public class DayBreakDownActivity extends ListActivity {
     private void createNote() {
         NoteItem note = NoteItem.getNew();
         Intent intent = new Intent(this, CreateNewNoteActivity.class);
-        intent.putExtra("key", dayId);
+        String pattern = "HH:mm:ss";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        String id = formatter.format(new Date());
+        id = id.replace(":","");
+        //Toast.makeText(DayBreakDownActivity.this, dayId + id, Toast.LENGTH_LONG).show();
+        intent.putExtra("key", dayId+id);
         intent.putExtra("time",note.getTime());
         intent.putExtra("title",note.getTitle());
         intent.putExtra("description",note.getDescription());

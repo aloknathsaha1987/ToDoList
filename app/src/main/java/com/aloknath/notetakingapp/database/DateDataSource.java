@@ -54,6 +54,53 @@ public class DateDataSource {
         return (insertId != -1);
     }
 
+    /*
+            public int updateDayItems(NoteItem note, NoteItem unModifiedNote){
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        //note.setTitle("Test123");
+//        contentValues.put(DateDbOpenHelper.DATE_ID, note.getKey());
+        contentValues.put(DateDbOpenHelper.TIME, note.getTime());
+        contentValues.put(DateDbOpenHelper.TITLE, note.getTitle());
+        contentValues.put(DateDbOpenHelper.DESCRIPTION, note.getDescription());
+        contentValues.put(DateDbOpenHelper.LOCATION, note.getLocation());
+
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DateDbOpenHelper.TABLENAME +
+                " WHERE date_id like '%" + unModifiedNote.getKey() + "%' AND task_title like '%" +
+                unModifiedNote.getTitle() + "%'", null);
+
+        int id = 0;
+
+        if (cursor.moveToFirst()){
+            id = cursor.getInt(cursor.getColumnIndex("_id"));
+            Log.i("The _d", String.valueOf(id));
+        }
+
+
+//        String[] args = { note.getKey() };
+//        String query =
+//                "UPDATE " + DateDbOpenHelper.TABLENAME
+//                        + " SET "   + DateDbOpenHelper.TIME + " = " + timeText
+//                        + " WHERE " + DateDbOpenHelper.DATE_ID +"=?";
+//
+//        Cursor cu = sqLiteDatabase.rawQuery( query, args);
+//        cu.moveToFirst();
+//        cu.close();
+//      this.db.update(ENTRY_TABLE, args, ("message = ? AND username = "+user), new String[] {og});
+
+//        return sqLiteDatabase.update(DateDbOpenHelper.TABLENAME, contentValues,
+//                DateDbOpenHelper.DATE_ID + " = ? AND " + DateDbOpenHelper.TITLE + " = ? ",
+//                new String[] { note.getKey(), note.getTitle() });
+
+        return sqLiteDatabase.update(DateDbOpenHelper.TABLENAME, contentValues,
+                "_id" + " = ? ",
+                new String[] {String.valueOf(id)});
+
+    }
+
+     */
     public int updateDayItems(NoteItem note){
 
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
@@ -77,8 +124,12 @@ public class DateDataSource {
 //      this.db.update(ENTRY_TABLE, args, ("message = ? AND username = "+user), new String[] {og});
 
         return sqLiteDatabase.update(DateDbOpenHelper.TABLENAME, contentValues,
-                DateDbOpenHelper.DATE_ID + " = ? AND " + DateDbOpenHelper.TITLE + " = ? ",
-                new String[] { note.getKey(), note.getTitle() });
+                DateDbOpenHelper.DATE_ID + " = ? ",
+                new String[] { note.getKey() });
+
+//        return sqLiteDatabase.update(DateDbOpenHelper.TABLENAME, contentValues,
+//                DateDbOpenHelper.DATE_ID + " = ? AND " + DateDbOpenHelper.TIME + " = ? ",
+//                new String[] { note.getKey(), note.getTime() });
 
     }
 
