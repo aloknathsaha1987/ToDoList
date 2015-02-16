@@ -6,5 +6,9 @@
     <string name="action_calender">Calender</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="enter_time">Enter Time</string>
+    <string name="enter_title">Enter Task Title</string>
+    <string name="enter_description">Enter Description</string>
+    <string name="enter_location">Enter Location</string>
 
 </resources>

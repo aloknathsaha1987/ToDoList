@@ -61,10 +61,10 @@ public class DayBreakDownActivity extends ListActivity {
 
                     NoteItem note = new NoteItem();
                     note.setKey(day_Table_ID);
-                    note.setTitle("Enter Title");
-                    note.setTime("Enter Time");
-                    note.setDescription("Enter Description");
-                    note.setLocation("Enter Location");
+//                    note.setTitle("Enter Title");
+//                    note.setTime("Enter Time");
+//                    note.setDescription("Enter Description");
+//                    note.setLocation("Enter Location");
 
                     dataSource = new DateDataSource(DayBreakDownActivity.this);
                     dataSource.open();

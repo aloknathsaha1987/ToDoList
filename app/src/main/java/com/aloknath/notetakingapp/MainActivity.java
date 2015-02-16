@@ -20,6 +20,10 @@ import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -57,10 +61,15 @@ public class MainActivity extends ListActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+
         // For Context Menu
         registerForContextMenu(getListView());
         //getActionBar().setDisplayShowTitleEnabled(false);
+        getActionBar().setDisplayShowTitleEnabled(true);
+        getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setTitle("Today's Tasks");
+
+
 
         String pattern = "MM-dd-yyyy";
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -99,7 +108,7 @@ public class MainActivity extends ListActivity {
 
     private void setupDrawer() {
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.drawable.ic_launcher,
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.drawable.ic_drawer,
                 R.string.drawer_open, R.string.drawer_close) {
 
             /** Called when a drawer has settled in a completely open state. */
@@ -112,7 +121,7 @@ public class MainActivity extends ListActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getActionBar().setTitle(mActivityTitle);
+                getActionBar().setTitle("Today's Tasks");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -139,7 +148,16 @@ public class MainActivity extends ListActivity {
         todayDataSource.open();
         notesList = todayDataSource.getDayItenary(dayId);
         todayDataSource.close();
-        //notesList = dataSource.findAll();
+
+        // Sort the List Items based on the time entered
+        Collections.sort(notesList, new Comparator<NoteItem>() {
+            @Override
+            public int compare(NoteItem item1, NoteItem item2) {
+
+                return item1.getTime().compareTo(item2.getTime());
+            }
+        });
+
         ArrayAdapter<NoteItem> adapter = new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
         setListAdapter(adapter);
     }
@@ -206,10 +224,7 @@ public class MainActivity extends ListActivity {
         id = id.replace(":","");
         //Toast.makeText(DayBreakDownActivity.this, dayId + id, Toast.LENGTH_LONG).show();
         intent.putExtra("key", dayId+id);
-        intent.putExtra("time",note.getTime());
-        intent.putExtra("title",note.getTitle());
-        intent.putExtra("description",note.getDescription());
-        intent.putExtra("location",note.getLocation());
+
         startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
     }
 

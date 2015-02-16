@@ -1,14 +1,21 @@
 package com.aloknath.notetakingapp;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by ALOKNATH on 2/11/2015.
@@ -17,6 +24,9 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
 
     private NoteItem item;
     private DateDataSource dataSource;
+    final Calendar calendar = Calendar.getInstance();
+    EditText setTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,22 +39,7 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
         Intent intent = this.getIntent();
         item = new NoteItem();
         item.setKey(intent.getStringExtra("key"));
-        item.setTime(intent.getStringExtra("time"));
-        item.setTitle(intent.getStringExtra("title"));
-        item.setDescription(intent.getStringExtra("description"));
-        item.setLocation(intent.getStringExtra("location"));
-
-        EditText editText = (EditText)findViewById(R.id.titleText);
-        editText.setText(item.getTitle());
-
-        editText = (EditText)findViewById(R.id.titleDescription);
-        editText.setText(item.getDescription());
-
-        editText = (EditText)findViewById(R.id.titleLocation);
-        editText.setText(item.getLocation());
-
-        editText = (EditText)findViewById(R.id.titleTime);
-        editText.setText(item.getTime());
+        setTime = (EditText)findViewById(R.id.titleTime);
 
         Button save = (Button)findViewById(R.id.save_button);
         save.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +56,31 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
                 finish();
             }
         });
-        //Toast.makeText(this, "Weird: " + item.getKey() , Toast.LENGTH_SHORT).show();
+
     }
+
+    TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            setCurrentDateOnView();
+
+        }
+    };
+
+    private void setCurrentDateOnView() {
+        String timeFormat = "kk:mm";
+        SimpleDateFormat stf = new SimpleDateFormat(timeFormat, Locale.US);
+       // setTime.setText(stf.format(calendar.getTime()));
+        setTime.setText(stf.format(calendar.getTime()));
+
+    }
+
+    public void timeOnClick(View view){
+        new TimePickerDialog(CreateNewNoteActivity.this, time, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true).show();
+    }
+
 
     @Override
     protected void onResume() {
@@ -91,11 +109,10 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
 
     private void saveToDbAndFinish() {
 
-        EditText editText = (EditText)findViewById(R.id.titleTime);
-        String noteText = editText.getText().toString();
+        String noteText = setTime.getText().toString();
         item.setTime(noteText);
 
-        editText = (EditText)findViewById(R.id.titleText);
+        EditText editText = (EditText)findViewById(R.id.titleText);
         noteText = editText.getText().toString();
         item.setTitle(noteText);
 
@@ -106,7 +123,6 @@ public class CreateNewNoteActivity extends NoteEditorActivity {
         editText = (EditText)findViewById(R.id.titleLocation);
         noteText = editText.getText().toString();
         item.setLocation(noteText);
-
 
         dataSource.addDayItems(item);
         dataSource.close();

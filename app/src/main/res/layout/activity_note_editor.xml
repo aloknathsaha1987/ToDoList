@@ -24,6 +24,7 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:id="@+id/titleText"
+            android:hint="@string/enter_title"
             android:ems="10"
             android:singleLine="false"
             android:inputType="textMultiLine"
@@ -48,6 +49,7 @@
             android:layout_width="fill_parent"
             android:layout_height="100dp"
             android:id="@+id/titleDescription"
+            android:hint="@string/enter_description"
             android:ems="10"
             android:singleLine="false"
             android:inputType="textMultiLine"
@@ -74,6 +76,7 @@
             android:id="@+id/titleLocation"
             android:ems="10"
             android:singleLine="false"
+            android:hint="@string/enter_location"
             android:inputType="textMultiLine"
             android:layout_below="@+id/task_location"
             android:layout_alignParentLeft="true"
@@ -96,13 +99,14 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:id="@+id/titleTime"
+            android:inputType="time"
             android:ems="10"
-            android:singleLine="false"
-            android:inputType="textMultiLine"
+            android:hint="@string/enter_time"
             android:layout_below="@+id/task_time"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:onClick="timeOnClick"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -122,6 +126,8 @@
             android:layout_marginTop="20dp"
             android:layout_alignLeft="@+id/save_button"
             android:layout_marginLeft="100dp"/>
+
+
 
     </RelativeLayout>
 

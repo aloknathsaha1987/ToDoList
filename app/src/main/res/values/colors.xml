@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <item name="transparent" type="color">#00FFFFFF</item>
+
+    <item name="white" type="color">#FFFFFF</item>
+
+    <item name="green" type="color">#4499CC00</item>
+
+    <item name="darkgreen" type="color">#FF669900</item>
+
+</resources>

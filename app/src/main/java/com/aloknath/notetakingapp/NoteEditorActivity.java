@@ -1,15 +1,24 @@
 package com.aloknath.notetakingapp;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
+
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by ALOKNATH on 2/9/2015.
@@ -18,6 +27,8 @@ public class NoteEditorActivity extends Activity {
 
     private NoteItem note;
     private DateDataSource dataSource;
+    final Calendar calendar = Calendar.getInstance();
+    EditText setTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +53,8 @@ public class NoteEditorActivity extends Activity {
         editText = (EditText)findViewById(R.id.titleLocation);
         editText.setText(note.getLocation());
 
-        editText = (EditText)findViewById(R.id.titleTime);
-        editText.setText(note.getTime());
+        setTime = (EditText)findViewById(R.id.titleTime);
+        setTime.setText(note.getTime());
 
         Button save = (Button)findViewById(R.id.save_button);
         save.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +105,38 @@ public class NoteEditorActivity extends Activity {
         dataSource.updateDayItems(note);
         dataSource.close();
         finish();
+    }
+
+    Time timer;
+    TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            calendar.set(Calendar.HOUR, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            setCurrentDateOnView();
+
+        }
+    };
+
+    private void setCurrentDateOnView() {
+        String timeFormat = "hh:mm a";
+        SimpleDateFormat stf = new SimpleDateFormat(timeFormat, Locale.US);
+        setTime.setText(stf.format(calendar.getTime()));
+
+    }
+
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            calendar.set(Calendar.MONTH, monthOfYear);
+        }
+    };
+
+    public void timeOnClick(View view){
+        new TimePickerDialog(NoteEditorActivity.this, time, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true ).show();
+
     }
 
     @Override
