@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aloknath.notetakingapp" >
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -23,6 +25,9 @@
         <activity android:name=".CalenderActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".DayBreakDownActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".CreateNewNoteActivity" android:configChanges="orientation|screenSize"/>
+
+        <service android:name=".notification_manager.NotifyService"
+            android:enabled="true" />
 
     </application>
 

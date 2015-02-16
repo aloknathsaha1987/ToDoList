@@ -1,7 +1,9 @@
 package com.aloknath.notetakingapp;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -18,10 +20,12 @@ import android.widget.Toast;
 
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
+import com.aloknath.notetakingapp.notification_manager.NotifyService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -69,8 +73,6 @@ public class MainActivity extends ListActivity {
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setTitle("Today's Tasks");
 
-
-
         String pattern = "MM-dd-yyyy";
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
         String key = formatter.format(new Date());
@@ -80,6 +82,10 @@ public class MainActivity extends ListActivity {
         key = "TableNo" + key;
         dayId = key;
         refreshDisplay();
+
+        //Notify
+        notification(notesList);
+
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,6 +104,33 @@ public class MainActivity extends ListActivity {
             }
         });
 
+    }
+
+    private void notification(List<NoteItem> notes) {
+        int hour = 0;
+        int min = 0;
+
+        for (NoteItem note : notes){
+            String noteTime = note.getTime();
+             hour = Integer.parseInt(noteTime.substring(0,2));
+             min = Integer.parseInt(noteTime.substring(3,5));
+//            Toast.makeText(this,  String.valueOf(hour), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, String.valueOf(min), Toast.LENGTH_SHORT).show();
+            break;
+        }
+
+        //Notification Start
+
+        Intent myIntent = new Intent(this , NotifyService.class);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, min);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*30 , pendingIntent);
+        //Notification End
     }
 
     private void addDrawerItems() {
@@ -157,6 +190,15 @@ public class MainActivity extends ListActivity {
                 return item1.getTime().compareTo(item2.getTime());
             }
         });
+
+//        for (NoteItem note : notesList){
+//            String noteTime = note.getTime();
+//            int hour = Integer.parseInt(noteTime.substring(0,2));
+//            int min = Integer.parseInt(noteTime.substring(3,5));
+//           // String value = String.valueOf(hour);
+//            Toast.makeText(this,  String.valueOf(hour), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, String.valueOf(min), Toast.LENGTH_SHORT).show();
+//        }
 
         ArrayAdapter<NoteItem> adapter = new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
         setListAdapter(adapter);

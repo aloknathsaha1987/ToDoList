@@ -107,11 +107,10 @@ public class NoteEditorActivity extends Activity {
         finish();
     }
 
-    Time timer;
     TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-            calendar.set(Calendar.HOUR, hourOfDay);
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
             setCurrentDateOnView();
 
@@ -119,7 +118,7 @@ public class NoteEditorActivity extends Activity {
     };
 
     private void setCurrentDateOnView() {
-        String timeFormat = "hh:mm a";
+        String timeFormat = "kk:mm";
         SimpleDateFormat stf = new SimpleDateFormat(timeFormat, Locale.US);
         setTime.setText(stf.format(calendar.getTime()));
 
