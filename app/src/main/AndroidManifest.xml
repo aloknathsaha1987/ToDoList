@@ -25,6 +25,7 @@
         <activity android:name=".activities.CalenderActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".activities.DayBreakDownActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".activities.CreateNewNoteActivity" android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.TaskDisplayActivity" android:configChanges="orientation|screenSize"/>
 
         <service android:name=".notification_service.NotifyService"
             android:enabled="true" />

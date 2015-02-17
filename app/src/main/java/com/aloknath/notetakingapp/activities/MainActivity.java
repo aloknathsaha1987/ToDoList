@@ -84,6 +84,7 @@ public class MainActivity extends ListActivity {
         key = "TableNo" + key;
         dayId = key;
         refreshDisplay();
+        notification(notesList);
 
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,72 +108,49 @@ public class MainActivity extends ListActivity {
 
     private void notification(List<NoteItem> notes) {
 
-        int hour = 0;
-        int min = 0;
-        NoteItem noteItem =  NoteItem.getNew();
+        int hour;
+        int min;
+
+        NoteItem noteItem;
 
         for (NoteItem note : notes){
             String noteTime = note.getTime();
             if(noteTime.isEmpty()){
-                hour = 0;
-                min = 0;
+              // Do Nothing
             }else {
                 hour = Integer.parseInt(noteTime.substring(0, 2));
                 min = Integer.parseInt(noteTime.substring(3, 5));
+                noteItem = note;
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, min);
+                int id = hour * 60 + min;
+
+                Intent myIntent = new Intent(MainActivity.this, MyReceiver.class);
+
+                if(noteItem != null){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", noteItem.getTitle());
+                    bundle.putString("description", noteItem.getDescription());
+                    bundle.putString("location", noteItem.getLocation());
+                    bundle.putString("time", noteItem.getTime());
+                    bundle.putString("key", noteItem.getKey());
+                    bundle.putInt("notificationId", id);
+
+                    myIntent.putExtras(bundle);
+                }
+
+                PendingIntent pendingIntent;
+                pendingIntent = PendingIntent.getBroadcast(this.context, id, myIntent, PendingIntent.FLAG_ONE_SHOT);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 30, pendingIntent);
+
             }
-            noteItem = note;
-//            Toast.makeText(this, "Hour Set As: " + String.valueOf(hour), Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, "Minutes Set As: " + String.valueOf(min), Toast.LENGTH_SHORT).show();
-            break;
+
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, min);
-
-//        calendar.set(Calendar.MONTH, 2);
-//        calendar.set(Calendar.YEAR, 2015);
-//        calendar.set(Calendar.DAY_OF_MONTH, 16);
-
-        Intent myIntent = new Intent(MainActivity.this, MyReceiver.class);
-        PendingIntent pendingIntent;
-        pendingIntent = PendingIntent.getBroadcast(this.context, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 30, pendingIntent);
-
-
-
-        //calendar.set(Calendar.SECOND, 0);
-//        calendar.set(Calendar.AM_PM,Calendar.PM);
-
-//        Intent myIntent = new Intent(MainActivity.this, MyReceiver.class);
-//        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent,0);
-//
-//        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 30, pendingIntent);
-//        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-//
-//        //Notification Start
-//        if (notes.size() != 0) {
-//            Intent myIntent = new Intent(this, NotifyService.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title", noteItem.getTitle());
-//            bundle.putString("description", noteItem.getDescription());
-//            bundle.putString("location", noteItem.getLocation());
-//            myIntent.putExtras(bundle);
-//            //this.startService(myIntent);
-//
-//            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//            PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.set(Calendar.MINUTE, min);
-//            calendar.set(Calendar.HOUR_OF_DAY, hour);
-//
-//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 30, pendingIntent);
-//        }
-//        //Notification End
     }
+
 
     private void addDrawerItems() {
         String[] osArray = { "Calender", "Editor" };
@@ -232,14 +210,6 @@ public class MainActivity extends ListActivity {
             }
         });
 
-//        for (NoteItem note : notesList){
-//            String noteTime = note.getTime();
-//            int hour = Integer.parseInt(noteTime.substring(0,2));
-//            int min = Integer.parseInt(noteTime.substring(3,5));
-//           // String value = String.valueOf(hour);
-//            Toast.makeText(this,  String.valueOf(hour), Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, String.valueOf(min), Toast.LENGTH_SHORT).show();
-//        }
 
         ArrayAdapter<NoteItem> adapter = new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
         setListAdapter(adapter);

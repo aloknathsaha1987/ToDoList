@@ -1,6 +1,9 @@
 package com.aloknath.notetakingapp.activities;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -12,12 +15,16 @@ import android.widget.ListView;
 
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
+import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.data.NotesDailyDataSource;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +38,7 @@ public class DayBreakDownActivity extends ListActivity {
     private DateDataSource dataSource;
     private int currentNoteId;
     private String dayId;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +46,7 @@ public class DayBreakDownActivity extends ListActivity {
         setContentView(R.layout.activity_main);
         registerForContextMenu(getListView());
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
+        this.context = this;
         final String day_Table_ID;
         final boolean found;
 
@@ -56,26 +64,66 @@ public class DayBreakDownActivity extends ListActivity {
                 if(found){
 
                     refreshDisplay();
+                    notification(notesList);
 
                 }else{
 
                     NoteItem note = new NoteItem();
                     note.setKey(day_Table_ID);
-//                    note.setTitle("Enter Title");
-//                    note.setTime("Enter Time");
-//                    note.setDescription("Enter Description");
-//                    note.setLocation("Enter Location");
-
                     dataSource = new DateDataSource(DayBreakDownActivity.this);
                     dataSource.open();
                     dataSource.addDayItems(note);
-                    //notesList = dataSource.getDayItenary(day_Table_ID);
                     dataSource.close();
                     refreshDisplay();
                 }
             }
         }.start();
 
+
+    }
+
+    private void notification(List<NoteItem> notes) {
+
+        int hour;
+        int min;
+
+        NoteItem noteItem;
+
+        for (NoteItem note : notes){
+            String noteTime = note.getTime();
+            if(noteTime.isEmpty()){
+                // Do Nothing
+            }else {
+                hour = Integer.parseInt(noteTime.substring(0, 2));
+                min = Integer.parseInt(noteTime.substring(3, 5));
+                noteItem = note;
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, min);
+                int id = hour * 60 + min;
+
+                Intent myIntent = new Intent(DayBreakDownActivity.this, MyReceiver.class);
+
+                if(noteItem != null){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", noteItem.getTitle());
+                    bundle.putString("description", noteItem.getDescription());
+                    bundle.putString("location", noteItem.getLocation());
+                    bundle.putString("time", noteItem.getTime());
+                    bundle.putString("key", noteItem.getKey());
+                    bundle.putInt("notificationId", id);
+
+                    myIntent.putExtras(bundle);
+                }
+
+                PendingIntent pendingIntent;
+                pendingIntent = PendingIntent.getBroadcast(this.context, id, myIntent, PendingIntent.FLAG_ONE_SHOT);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 30, pendingIntent);
+
+            }
+
+        }
 
     }
 
@@ -135,7 +183,6 @@ public class DayBreakDownActivity extends ListActivity {
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
         String id = formatter.format(new Date());
         id = id.replace(":","");
-        //Toast.makeText(DayBreakDownActivity.this, dayId + id, Toast.LENGTH_LONG).show();
         intent.putExtra("key", dayId+id);
         intent.putExtra("time",note.getTime());
         intent.putExtra("title",note.getTitle());
@@ -148,6 +195,7 @@ public class DayBreakDownActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MainActivity.EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
             refreshDisplay();
+            notification(notesList);
         }
     }
 
@@ -178,7 +226,17 @@ public class DayBreakDownActivity extends ListActivity {
         notesList = dataSource.getDayItenary(dayId);
         dataSource.close();
 
-       // notesList = hourlyDataSource.findAll();
+        // Sort the List Items based on the time entered
+        Collections.sort(notesList, new Comparator<NoteItem>() {
+            @Override
+            public int compare(NoteItem item1, NoteItem item2) {
+
+                return item1.getTime().compareTo(item2.getTime());
+            }
+        });
+
+
+        // notesList = hourlyDataSource.findAll();
         DayItemAdapter adapter = new DayItemAdapter(this, R.layout.list_item_layout, notesList);
         setListAdapter(adapter);
     }
