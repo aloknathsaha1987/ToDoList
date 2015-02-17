@@ -10,5 +10,6 @@
     <string name="enter_title">Enter Task Title</string>
     <string name="enter_description">Enter Description</string>
     <string name="enter_location">Enter Location</string>
+    <string name="view_google_map">Get Directions</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
@@ -29,6 +31,7 @@ public class NoteEditorActivity extends Activity {
     private DateDataSource dataSource;
     final Calendar calendar = Calendar.getInstance();
     EditText setTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +120,7 @@ public class NoteEditorActivity extends Activity {
         }
     };
 
+
     private void setCurrentDateOnView() {
         String timeFormat = "kk:mm";
         SimpleDateFormat stf = new SimpleDateFormat(timeFormat, Locale.US);
@@ -155,10 +159,22 @@ public class NoteEditorActivity extends Activity {
         super.onDestroy();
         dataSource.close();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.task_menu, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             saveAndFinish();
+        }else if (item.getItemId() == R.id.google_maps){
+            Intent intent = new Intent(this, GetTaskLocationMap.class);
+            intent.putExtra("location", note.getLocation());
+            startActivity(intent);
+
         }
         return false;
     }

@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
 import com.aloknath.notetakingapp.data.NoteItem;
@@ -116,6 +117,7 @@ public class MainActivity extends ListActivity {
         for (NoteItem note : notes){
             String noteTime = note.getTime();
             if(noteTime.isEmpty()){
+//                Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
               // Do Nothing
             }else {
                 hour = Integer.parseInt(noteTime.substring(0, 2));
@@ -252,16 +254,20 @@ public class MainActivity extends ListActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
+        Intent intent;
         //noinspection SimplifiableIfStatement
         switch (id){
             case R.id.action_create:
                 createNote();
                 break;
             case R.id.action_calender:
-                Intent intent = new Intent(this, CalenderActivity.class);
+                intent = new Intent(this, CalenderActivity.class);
                 startActivityForResult(intent, CALENDER_ACTIVITY_REQUEST);
                 break;
+//            case R.id.google_maps:
+//                intent = new Intent(this, GetTaskLocationMap.class);
+//                startActivity(intent);
+//                break;
             default:
                 break;
         }

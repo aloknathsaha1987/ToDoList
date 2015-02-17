@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
@@ -20,6 +23,7 @@ public class TaskDisplayActivity extends Activity {
     private DateDataSource dataSource;
     private NotificationManager mNotificationManager;
     NoteItem item = new NoteItem();
+    String location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +32,6 @@ public class TaskDisplayActivity extends Activity {
 
         dataSource = new DateDataSource(this);
         dataSource.open();
-
-
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
@@ -49,6 +51,7 @@ public class TaskDisplayActivity extends Activity {
 
         textView = (TextView)findViewById(R.id.titleLocation);
         textView.setText(bundle.getString("location"));
+        location = bundle.getString("location");
 
         textView = (TextView)findViewById(R.id.titleTime);
         textView.setText(bundle.getString("time"));
@@ -74,6 +77,24 @@ public class TaskDisplayActivity extends Activity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.task_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }else if (item.getItemId() == R.id.google_maps){
+            Intent intent = new Intent(this, GetTaskLocationMap.class);
+            intent.putExtra("location",location);
+            startActivity(intent);
+        }
+        return false;
     }
 
     @Override

@@ -41,6 +41,12 @@ public class DateDataSource {
 
     public boolean addDayItems(NoteItem note){
 
+        //keytool -list -v -keystore "C:\Users\ALOKNATH\.android\note_app.keystore" -alias Alok -storepass android -keypass android
+        //  33:51:D6:2E:AA:B1:BF:BE:94:BA:B9:21:E2:16:6B:19:19:C6:4B:43
+        //keytool -list -v -keystore "C:\Users\ALOKNATH\.android\note_app.keystore" -alias Alok
+        //keytool -exportcert -alias androiddebugkey -keystore "C:\Users\ALOKNATH\.android\note_app.keystore" | "C:\Users\OpenSSL\bin\openssl" sha1 -binary | "C:\Users\OpenSSL\bin\openssl" base64
+        //keytool -exportcert -alias AlokNathSaha -keystore "C:\Users\ALOKNATH\.android\debug_final.keystore"  | "C:\Users\OpenSSL\bin\openssl" sha1 -binary | "C:\Users\OpenSSL\bin\openssl" base64
+
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
