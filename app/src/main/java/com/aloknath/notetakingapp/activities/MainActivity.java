@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
@@ -84,9 +85,6 @@ public class MainActivity extends ListActivity {
         dayId = key;
         refreshDisplay();
 
-        //Notify
-        notification(notesList);
-
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -123,14 +121,14 @@ public class MainActivity extends ListActivity {
                 min = Integer.parseInt(noteTime.substring(3, 5));
             }
             noteItem = note;
-//            Toast.makeText(this,  String.valueOf(hour), Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, String.valueOf(min), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Hour Set As: " + String.valueOf(hour), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Minutes Set As: " + String.valueOf(min), Toast.LENGTH_SHORT).show();
             break;
         }
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, min-1);
+        calendar.set(Calendar.MINUTE, min);
 
 //        calendar.set(Calendar.MONTH, 2);
 //        calendar.set(Calendar.YEAR, 2015);
@@ -140,7 +138,7 @@ public class MainActivity extends ListActivity {
         PendingIntent pendingIntent;
         pendingIntent = PendingIntent.getBroadcast(this.context, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 30, pendingIntent);
 
 
 
@@ -329,8 +327,12 @@ public class MainActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK){
             refreshDisplay();
+            //Notify
+            notification(notesList);
         }else if(requestCode == CALENDER_ACTIVITY_REQUEST && resultCode == RESULT_OK){
             refreshDisplay();
+            //Notify
+            notification(notesList);
         }
     }
 
