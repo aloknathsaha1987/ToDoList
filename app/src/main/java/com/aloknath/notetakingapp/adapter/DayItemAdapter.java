@@ -37,4 +37,9 @@ public class DayItemAdapter extends ArrayAdapter<NoteItem> {
         editText.setText(note.getTitle());
         return super.getView(position, convertView, parent);
     }
+
+    public void swapItems(List<NoteItem> items) {
+        this.noteItems = items;
+        notifyDataSetChanged();
+    }
 }

@@ -51,6 +51,7 @@ public class MainActivity extends ListActivity {
 
     private DateDataSource todayDataSource;
     List<NoteItem> notesList;
+    public static String TODAYKEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +86,10 @@ public class MainActivity extends ListActivity {
         key = "TableNo" + key;
         dayId = key;
         refreshDisplay();
-        notification(notesList);
+        TODAYKEY = key;
+       // Toast.makeText(this, TODAYKEY, Toast.LENGTH_SHORT).show();
 
+        notification(notesList);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -116,7 +119,7 @@ public class MainActivity extends ListActivity {
 
         for (NoteItem note : notes){
             String noteTime = note.getTime();
-            if(noteTime == null){
+            if(note == null || noteTime.isEmpty()){
 //                Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
               // Do Nothing
             }else {
@@ -208,7 +211,12 @@ public class MainActivity extends ListActivity {
             @Override
             public int compare(NoteItem item1, NoteItem item2) {
 
-                return item1.getTime().compareTo(item2.getTime());
+                if(item1.getTime().isEmpty() || item2.getTime().isEmpty()){
+                    return 0;
+                }else {
+                    return item1.getTime().compareTo(item2.getTime());
+                }
+
             }
         });
 

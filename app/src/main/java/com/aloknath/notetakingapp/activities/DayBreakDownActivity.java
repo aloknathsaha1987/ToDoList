@@ -64,11 +64,15 @@ public class DayBreakDownActivity extends ListActivity {
                 if(found){
 
                     refreshDisplay();
-                    notification(notesList);
+                    if(dayId == MainActivity.TODAYKEY){
+                        notification(notesList);
+                    }
+
 
                 }else{
 
                     NoteItem note = new NoteItem();
+                    note.setTime("00:00");
                     note.setKey(day_Table_ID);
                     dataSource = new DateDataSource(DayBreakDownActivity.this);
                     dataSource.open();
@@ -91,7 +95,7 @@ public class DayBreakDownActivity extends ListActivity {
 
         for (NoteItem note : notes){
             String noteTime = note.getTime();
-            if(noteTime.isEmpty()){
+            if( note == null || noteTime.isEmpty()){
                 // Do Nothing
             }else {
                 hour = Integer.parseInt(noteTime.substring(0, 2));
@@ -195,7 +199,9 @@ public class DayBreakDownActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MainActivity.EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
             refreshDisplay();
-            notification(notesList);
+            if(dayId == MainActivity.TODAYKEY){
+                notification(notesList);
+            }
         }
     }
 
@@ -227,11 +233,17 @@ public class DayBreakDownActivity extends ListActivity {
         dataSource.close();
 
         // Sort the List Items based on the time entered
+
         Collections.sort(notesList, new Comparator<NoteItem>() {
             @Override
-            public int compare(NoteItem item1, NoteItem item2) {
+            public int compare(NoteItem item1, NoteItem item2)
+            {
+                if(item1.getTime().isEmpty() || item2.getTime().isEmpty()){
+                    return 0;
+                }else {
+                    return item1.getTime().compareTo(item2.getTime());
+                }
 
-                return item1.getTime().compareTo(item2.getTime());
             }
         });
 

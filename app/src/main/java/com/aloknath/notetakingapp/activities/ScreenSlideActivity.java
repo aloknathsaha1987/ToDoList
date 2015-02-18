@@ -11,9 +11,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.fragments.ScreenSlidePageFragment;
+
 
 /**
  * Created by ALOKNATH on 2/17/2015.
@@ -22,7 +22,7 @@ public class ScreenSlideActivity extends FragmentActivity {
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
-    private static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 7;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -34,6 +34,7 @@ public class ScreenSlideActivity extends FragmentActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class ScreenSlideActivity extends FragmentActivity {
         mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+
+               // Toast.makeText(ScreenSlideActivity.this, "Page number" + String.valueOf(position), Toast.LENGTH_SHORT).show();
                 // When changing pages, reset the action bar actions since they are dependent
                 // on which page is currently active. An alternative approach is to have each
                 // fragment expose actions itself (rather than the activity exposing actions),
@@ -88,6 +91,7 @@ public class ScreenSlideActivity extends FragmentActivity {
             case R.id.action_previous:
                 // Go to the previous step in the wizard. If there is no previous step,
                 // setCurrentItem will do nothing.
+
                 mPager.setCurrentItem(mPager.getCurrentItem() - 1);
                 return true;
 
