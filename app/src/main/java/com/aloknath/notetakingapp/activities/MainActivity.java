@@ -96,7 +96,7 @@ public class MainActivity extends ListActivity {
                     case 0:  intent = new Intent(MainActivity.this, CalenderActivity.class);
                              startActivity(intent);
                              break;
-                    case 1:  intent = new Intent(MainActivity.this, NoteEditorActivity.class);
+                    case 1:  intent = new Intent(MainActivity.this, ScreenSlideActivity.class);
                              startActivity(intent);
                              break;
                     default: break;
@@ -116,7 +116,7 @@ public class MainActivity extends ListActivity {
 
         for (NoteItem note : notes){
             String noteTime = note.getTime();
-            if(noteTime.isEmpty()){
+            if(noteTime == null){
 //                Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
               // Do Nothing
             }else {
@@ -155,7 +155,7 @@ public class MainActivity extends ListActivity {
 
 
     private void addDrawerItems() {
-        String[] osArray = { "Calender", "Editor" };
+        String[] osArray = { "Calender", "Week's Schedule" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
