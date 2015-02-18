@@ -46,6 +46,7 @@
         <activity android:name=".activities.TaskDisplayActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".GoogleMaps.GetTaskLocationMap" android:configChanges="orientation|screenSize"/>
         <activity android:name=".activities.ScreenSlideActivity" android:configChanges="orientation|screenSize"/>
+        <activity android:name=".fragments.ScreenSlidePageFragment" android:configChanges="orientation|screenSize"/>
         <service android:name=".notification_service.NotifyService"
             android:enabled="true" />
         <receiver android:name=".broadcast_receiver.MyReceiver"
