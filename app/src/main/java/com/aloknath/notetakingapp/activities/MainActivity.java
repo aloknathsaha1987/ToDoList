@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.aloknath.notetakingapp.GoogleLicense.GPSLicenseActivity;
 import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
@@ -268,14 +269,10 @@ public class MainActivity extends ListActivity {
             case R.id.action_create:
                 createNote();
                 break;
-            case R.id.action_calender:
-                intent = new Intent(this, CalenderActivity.class);
-                startActivityForResult(intent, CALENDER_ACTIVITY_REQUEST);
+            case R.id.googlePlayLicense:
+                intent = new Intent(this, GPSLicenseActivity.class);
+                startActivity(intent);
                 break;
-//            case R.id.google_maps:
-//                intent = new Intent(this, GetTaskLocationMap.class);
-//                startActivity(intent);
-//                break;
             default:
                 break;
         }
@@ -283,15 +280,14 @@ public class MainActivity extends ListActivity {
     }
 
 
-    private void createNote() { NoteItem note = NoteItem.getNew();
+    private void createNote() {
+
         Intent intent = new Intent(this, CreateNewNoteActivity.class);
         String pattern = "HH:mm:ss";
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
         String id = formatter.format(new Date());
         id = id.replace(":","");
-        //Toast.makeText(DayBreakDownActivity.this, dayId + id, Toast.LENGTH_LONG).show();
         intent.putExtra("key", dayId+id);
-
         startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
     }
 

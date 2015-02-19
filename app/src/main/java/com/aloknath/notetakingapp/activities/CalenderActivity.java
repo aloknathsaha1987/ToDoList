@@ -3,6 +3,7 @@ package com.aloknath.notetakingapp.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.aloknath.notetakingapp.R;
@@ -60,7 +61,7 @@ public class CalenderActivity extends Activity {
         if(item.getItemId() == android.R.id.home){
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);
-            finish();
+            NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
         }
         return false;
     }

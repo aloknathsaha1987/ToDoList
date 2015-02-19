@@ -2,12 +2,16 @@ package com.aloknath.notetakingapp.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,8 +46,6 @@ public class ScreenSlidePageFragment extends ListFragment {
      * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
      */
     private int mPageNumber;
-//    private ListView dayTaskListView;
-//    private ArrayAdapter<String> mAdapter;
     private String dayId;
     private int month;
     private int day;
@@ -51,9 +53,8 @@ public class ScreenSlidePageFragment extends ListFragment {
     private String key;
     private DateDataSource dataSource;
     private List<NoteItem> notesListShare;
-    private boolean activityStatus;
-    private DayItemAdapter adapter ;
-
+    private DayItemAdapter adapter;
+    private int currentNoteId;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -66,21 +67,67 @@ public class ScreenSlidePageFragment extends ListFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-
     public ScreenSlidePageFragment() {
 
     }
-
+//
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt(ARG_PAGE);
-        //Toast.makeText(getActivity(), String.valueOf(activityStatus) + "1", Toast.LENGTH_SHORT).show();
-        getDays(mPageNumber);
-        adapter = new DayItemAdapter(getActivity(),
-                R.layout.list_item_layout, notesListShare);
 
+    }
+
+    @Override
+    public void onActivityCreated(final Bundle savedInstanceState) {
+        //registerForContextMenu(getListView());
+        super.onActivityCreated(savedInstanceState);
+        refreshDisplay();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout containing a title and body text.
+         ViewGroup rootView = (ViewGroup) inflater
+                .inflate(R.layout.fragment_screen_slide_page, container, false);
+
+        return rootView;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add(0, MainActivity.MENU_DELETE_ID, 0, "Delete");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if(notesListShare.size() == 0){
+            Toast.makeText(getActivity(), "Delete Not Working", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getActivity(), "Item Deleted", Toast.LENGTH_SHORT).show();
+            if (item.getItemId() == MainActivity.MENU_DELETE_ID) {
+
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                currentNoteId = info.position;
+                NoteItem note = notesListShare.get(currentNoteId);
+                dataSource = new DateDataSource(getActivity());
+                dataSource.open();
+                dataSource.removeFromList(note);
+                dataSource.close();
+                refreshDisplay();
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void refreshDisplay() {
+        getDays(mPageNumber);
+        callDisplayAdapter();
+    }
+
+    private void callDisplayAdapter() {
+        adapter = new DayItemAdapter(getActivity(), R.layout.list_item_layout, notesListShare);
         setListAdapter(adapter);
     }
 
@@ -110,8 +157,6 @@ public class ScreenSlidePageFragment extends ListFragment {
 
         key = "TableNo" + key;
         dayId = key;
-        //Toast.makeText(getActivity(), dayId, Toast.LENGTH_SHORT).show();
-
         dataSource = new DateDataSource(getActivity());
         dataSource.open();
         notesListShare = dataSource.getDayItenary(dayId);
@@ -121,7 +166,6 @@ public class ScreenSlidePageFragment extends ListFragment {
         Collections.sort(notesListShare, new Comparator<NoteItem>() {
             @Override
             public int compare(NoteItem item1, NoteItem item2) {
-
                 if(item1.getTime().isEmpty() || item2.getTime().isEmpty()){
                     return 0;
                 }else {
@@ -129,22 +173,8 @@ public class ScreenSlidePageFragment extends ListFragment {
                 }
             }
         });
-
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout containing a title and body text.
-
-        //Toast.makeText(getActivity(), String.valueOf(activityStatus) + "2", Toast.LENGTH_SHORT).show();
-
-
-        ViewGroup rootView = (ViewGroup) inflater
-                .inflate(R.layout.fragment_screen_slide_page, container, false);
-
-        return rootView;
-    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -163,15 +193,7 @@ public class ScreenSlidePageFragment extends ListFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MainActivity.EDITOR_ACTIVITY_REQUEST && resultCode == Activity.RESULT_OK) {
             //onResume();
-
-            getDays(mPageNumber);
-            onResume();
-//            for(NoteItem note: notesListShare){
-//                Toast.makeText(getActivity(), note.getTitle(), Toast.LENGTH_SHORT).show();
-//            }
-//            activityStatus = true;
-//
-//            Toast.makeText(getActivity(), String.valueOf(activityStatus) + "3", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "List Updated", Toast.LENGTH_SHORT).show();
         }
     }
     /**
@@ -187,9 +209,9 @@ public class ScreenSlidePageFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getDays(mPageNumber);
         adapter.swapItems(notesListShare);
-//        adapter.notifyDataSetChanged();
-//        dataSource = new DateDataSource(getActivity());
+        callDisplayAdapter();
         dataSource.open();
     }
 

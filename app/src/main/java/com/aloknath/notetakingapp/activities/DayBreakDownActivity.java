@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.aloknath.notetakingapp.GoogleLicense.GPSLicenseActivity;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
@@ -150,8 +151,8 @@ public class DayBreakDownActivity extends ListActivity {
             case R.id.action_create:
                 createNote();
                 break;
-            case R.id.action_calender:
-                Intent intent = new Intent(this, CalenderActivity.class);
+            case R.id.googlePlayLicense:
+                Intent intent = new Intent(this, GPSLicenseActivity.class);
                 startActivity(intent);
                 break;
             case android.R.id.home:
