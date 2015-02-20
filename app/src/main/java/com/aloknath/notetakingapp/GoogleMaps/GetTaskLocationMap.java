@@ -10,12 +10,17 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.aloknath.notetakingapp.GoogleLicense.GPSLicenseActivity;
 import com.aloknath.notetakingapp.Json.JSONParser;
 import com.aloknath.notetakingapp.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +55,6 @@ import java.util.List;
 public class GetTaskLocationMap extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
     GoogleMap mMap;
-    Marker marker;
     LocationClient mLocationClient;
     boolean mShowMap;
     private double dstlatitude;
@@ -69,24 +74,39 @@ public class GetTaskLocationMap extends Activity implements GooglePlayServicesCl
 
         Intent intent = this.getIntent();
         location = intent.getStringExtra("location");
+        if (isOnline()) {
+            if (servicesOK()) {
+                setContentView(R.layout.display_google_map);
 
-        if (servicesOK()) {
-            setContentView(R.layout.display_google_map);
+                if (initMap()) {
 
-            if (initMap()) {
-
-                LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    mLocationClient = new LocationClient(GetTaskLocationMap.this, GetTaskLocationMap.this, GetTaskLocationMap.this);
-                    mLocationClient.connect();
-                    mShowMap = true;
-                }else{
-                    Toast.makeText(this, "Location Manager Not Available", Toast.LENGTH_SHORT).show();
+                    LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                        mLocationClient = new LocationClient(GetTaskLocationMap.this, GetTaskLocationMap.this, GetTaskLocationMap.this);
+                        mLocationClient.connect();
+                        mShowMap = true;
+                    }else{
+                        Toast.makeText(this, "Location Manager Not Available", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(this, "Map not available!", Toast.LENGTH_SHORT).show();
                 }
             }
-            else {
-                Toast.makeText(this, "Map not available!", Toast.LENGTH_SHORT).show();
-            }
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -104,6 +124,47 @@ public class GetTaskLocationMap extends Activity implements GooglePlayServicesCl
         }
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.google_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.google_Maps:
+                sendActionToIntent();
+                break;
+
+            case android.R.id.home:
+                finish();
+                break;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void sendActionToIntent() {
+        StringBuilder uri = new StringBuilder("geo:");
+        uri.append(latitude);
+        uri.append(",");
+        uri.append(longitude);
+        uri.append("?z=10");
+        uri.append("&q=" + URLEncoder.encode(location));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+        startActivity(intent);
     }
 
     private void drawPath(String result) {
@@ -203,14 +264,6 @@ public class GetTaskLocationMap extends Activity implements GooglePlayServicesCl
         }
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-        }
-        return false;
-    }
 
     public boolean servicesOK() {
         int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);

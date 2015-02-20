@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.aloknath.notetakingapp.R;
-import com.aloknath.notetakingapp.data.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
 
 import java.util.List;
 

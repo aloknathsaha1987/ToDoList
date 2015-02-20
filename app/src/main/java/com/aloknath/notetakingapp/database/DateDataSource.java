@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.aloknath.notetakingapp.data.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
 
 import java.util.ArrayList;
 import java.util.List;

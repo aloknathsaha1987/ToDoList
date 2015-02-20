@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.aloknath.notetakingapp.R;
-import com.aloknath.notetakingapp.data.NoteItem;
 import com.aloknath.notetakingapp.fragments.ScreenSlidePageFragment;
 
 import java.text.ParseException;

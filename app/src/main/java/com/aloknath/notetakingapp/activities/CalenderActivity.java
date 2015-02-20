@@ -2,37 +2,50 @@ package com.aloknath.notetakingapp.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.aloknath.notetakingapp.R;
+import com.aloknath.notetakingapp.data_preferences.DatesInWhichTaskStored;
 import com.squareup.timessquare.CalendarPickerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ALOKNATH on 2/9/2015.
  */
 
-
-
 public class CalenderActivity extends Activity {
+
+    private static final int CONTENT_PRESENT = 1005;
+    CalendarPickerView calendar;
+    DatesInWhichTaskStored datesSharedPrefs;
+    private List<Date> datesHighlighted = new ArrayList<Date>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calender_view);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        datesSharedPrefs = new DatesInWhichTaskStored(this);
+
 
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
-        CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
+        calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
         Date today = new Date();
         calendar.init(today, nextYear.getTime())
                 .withSelectedDate(today);
+        calendar.setBackgroundColor(Color.CYAN);
+        refreshHighlights();
         calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
@@ -44,7 +57,7 @@ public class CalenderActivity extends Activity {
                 //Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(CalenderActivity.this, DayBreakDownActivity.class);
                 intent.putExtra("Day_Table", key);
-                startActivity(intent);
+                startActivityForResult(intent, CONTENT_PRESENT);
 
             }
 
@@ -55,6 +68,46 @@ public class CalenderActivity extends Activity {
         });
     }
 
+    private void refreshHighlights() {
+        datesHighlighted = datesSharedPrefs.getHighlightedDates();
+        if(datesHighlighted.size() != 0) {
+            calendar.highlightDates(datesHighlighted);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CONTENT_PRESENT && resultCode == RESULT_OK) {
+            boolean contentValue = data.getBooleanExtra("Content Present", false);
+            if(contentValue){
+                //Toast.makeText(CalenderActivity.this, "The List is not null: "+ String.valueOf(datesHighlighted.size()), Toast.LENGTH_LONG).show();
+                // Search Shared Preferences for the Date
+                boolean present = datesSharedPrefs.searchHighlightedDates(String.valueOf(calendar.getSelectedDate()));
+                // If return is true, date already present
+                // Display Highlighted Table.
+                if(present){
+                    //Toast.makeText(CalenderActivity.this,String.valueOf(calendar.getSelectedDate()) + " Date Present in shared prefs so not added: " + String.valueOf(datesHighlighted.size()), Toast.LENGTH_LONG).show();
+                    calendar.highlightDates(datesHighlighted);
+                }
+                // If returns false, add the date
+                // Update the datesHighlighted Arraylist
+                // Display Highlighted Table
+                else{
+
+                    datesSharedPrefs.setHighlightDate(String.valueOf(calendar.getSelectedDate()));
+                    datesHighlighted = datesSharedPrefs.getHighlightedDates();
+                    //Toast.makeText(CalenderActivity.this,"Date Not Present in shared prefs so added: "+ String.valueOf(datesHighlighted.size()), Toast.LENGTH_LONG).show();
+                    calendar.highlightDates(datesHighlighted);
+                }
+
+            }else{
+                //Toast.makeText(CalenderActivity.this, "The List is null: "+ String.valueOf(datesHighlighted.size()), Toast.LENGTH_LONG).show();
+                // Remove the marker from the date
+                datesSharedPrefs.removeMarker(String.valueOf(calendar.getSelectedDate()));
+                refreshHighlights();
+            }
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -68,89 +121,3 @@ public class CalenderActivity extends Activity {
 
 }
 
-
-//public class CalenderActivity extends Activity{
-//    CalendarView calendar;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//
-//        super.onCreate(savedInstanceState);
-//
-//        //sets the main layout of the activity
-//
-//        setContentView(R.layout.calender_view);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        //initializes the calendarview
-//
-//        initializeCalendar();
-//
-//    }
-//
-//    public void initializeCalendar() {
-//
-//        calendar = (CalendarView) findViewById(R.id.calendar);
-//
-//        // sets whether to show the week number.
-//
-//        calendar.setShowWeekNumber(false);
-//
-//        // sets the first day of week according to Calendar.
-//
-//        // here we set Monday as the first day of the Calendar
-//
-//        calendar.setFirstDayOfWeek(2);
-//
-//        //The background color for the selected week.
-//
-//        calendar.setSelectedWeekBackgroundColor(getResources().getColor(R.color.green));
-//
-//        //sets the color for the dates of an unfocused month.
-//        calendar.setUnfocusedMonthDateColor(getResources().getColor(R.color.transparent));
-//
-//        //sets the color for the separator line between weeks.
-//
-//        calendar.setWeekSeparatorLineColor(getResources().getColor(R.color.transparent));
-//
-//        //sets the color for the vertical bar shown at the beginning and at the end of the selected date.
-//
-//        calendar.setSelectedDateVerticalBar(R.color.darkgreen);
-//
-//        //sets the listener to be notified upon selected date change.
-//
-//        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-//
-//                    //show the selected date as a toast
-//
-//            @Override
-//
-//            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
-//
-////                String pattern = "MM-dd-yyyy";
-////                SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-////                String key = formatter.format(date);
-////                key = key.replace("-","");
-//                String key = String.valueOf(month) + String.valueOf(day) + String.valueOf(year);
-//                //Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(CalenderActivity.this, DayBreakDownActivity.class);
-//                intent.putExtra("Day_Table", key);
-//                startActivity(intent);
-//
-//            }
-//
-//        });
-//
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if(item.getItemId() == android.R.id.home){
-//            Intent intent = new Intent();
-//            setResult(RESULT_OK, intent);
-//            finish();
-//        }
-//        return false;
-//    }
-//
-//}

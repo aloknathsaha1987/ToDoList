@@ -7,26 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.aloknath.notetakingapp.GoogleLicense.GPSLicenseActivity;
-import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
-import com.aloknath.notetakingapp.data.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.SimpleDateFormat;
@@ -131,6 +125,11 @@ public class MainActivity extends ListActivity {
               // Do Nothing
             }else {
                 hour = Integer.parseInt(noteTime.substring(0, 2));
+                if(hour > 0 ){
+                    hour = hour -1;
+                }else if (hour == 0){
+                    hour = 23;
+                }
                 min = Integer.parseInt(noteTime.substring(3, 5));
                 noteItem = note;
                 Calendar calendar = Calendar.getInstance();

@@ -15,7 +15,7 @@ import android.widget.TimePicker;
 
 import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
-import com.aloknath.notetakingapp.data.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.SimpleDateFormat;
@@ -171,6 +171,7 @@ public class NoteEditorActivity extends Activity {
         if(item.getItemId() == android.R.id.home){
             saveAndFinish();
         }else if (item.getItemId() == R.id.google_maps){
+
             Intent intent = new Intent(this, GetTaskLocationMap.class);
             intent.putExtra("location", note.getLocation());
             startActivity(intent);

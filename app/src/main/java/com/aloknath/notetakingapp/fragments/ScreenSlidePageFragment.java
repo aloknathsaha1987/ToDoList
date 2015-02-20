@@ -1,8 +1,6 @@
 package com.aloknath.notetakingapp.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,17 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.activities.MainActivity;
 import com.aloknath.notetakingapp.activities.NoteEditorActivity;
-import com.aloknath.notetakingapp.activities.ScreenSlideActivity;
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
-import com.aloknath.notetakingapp.data.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.ParseException;

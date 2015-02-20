@@ -17,8 +17,8 @@ import com.aloknath.notetakingapp.GoogleLicense.GPSLicenseActivity;
 import com.aloknath.notetakingapp.R;
 import com.aloknath.notetakingapp.adapter.DayItemAdapter;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
-import com.aloknath.notetakingapp.data.NoteItem;
-import com.aloknath.notetakingapp.data.NotesDailyDataSource;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NotesDailyDataSource;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 import java.text.SimpleDateFormat;
@@ -63,23 +63,10 @@ public class DayBreakDownActivity extends ListActivity {
             public void run(){
 
                 if(found){
-
                     refreshDisplay();
                     if(dayId == MainActivity.TODAYKEY){
                         notification(notesList);
                     }
-
-
-                }else{
-
-                    NoteItem note = new NoteItem();
-                    note.setTime("00:00");
-                    note.setKey(day_Table_ID);
-                    dataSource = new DateDataSource(DayBreakDownActivity.this);
-                    dataSource.open();
-                    dataSource.addDayItems(note);
-                    dataSource.close();
-                    refreshDisplay();
                 }
             }
         }.start();
@@ -100,6 +87,11 @@ public class DayBreakDownActivity extends ListActivity {
                 // Do Nothing
             }else {
                 hour = Integer.parseInt(noteTime.substring(0, 2));
+                if(hour > 0 ){
+                    hour = hour -1;
+                }else if (hour == 0){
+                    hour = 23;
+                }
                 min = Integer.parseInt(noteTime.substring(3, 5));
                 noteItem = note;
                 Calendar calendar = Calendar.getInstance();
@@ -145,21 +137,30 @@ public class DayBreakDownActivity extends ListActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent intent;
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_create:
                 createNote();
                 break;
             case R.id.googlePlayLicense:
-                Intent intent = new Intent(this, GPSLicenseActivity.class);
+                 intent = new Intent(this, GPSLicenseActivity.class);
                 startActivity(intent);
                 break;
             case android.R.id.home:
+                if(notesList.size() != 0){
+                    //Mark the calender
+                    intent = new Intent();
+                    intent.putExtra("Content Present", true);
+                    setResult(RESULT_OK, intent);
+                }else{
+                    intent = new Intent();
+                    intent.putExtra("Content Present", false);
+                    setResult(RESULT_OK, intent);
+                }
                 finish();
             default:
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }

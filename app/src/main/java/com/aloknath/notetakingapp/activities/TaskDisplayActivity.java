@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.aloknath.notetakingapp.GoogleMaps.GetTaskLocationMap;
 import com.aloknath.notetakingapp.R;
-import com.aloknath.notetakingapp.data.NoteItem;
+import com.aloknath.notetakingapp.data_preferences.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
 
 /**
