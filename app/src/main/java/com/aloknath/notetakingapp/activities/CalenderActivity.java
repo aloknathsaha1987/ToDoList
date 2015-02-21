@@ -35,6 +35,7 @@ public class CalenderActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calender_view);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle("Calendar");
         datesSharedPrefs = new DatesInWhichTaskStored(this);
 
 
@@ -53,10 +54,12 @@ public class CalenderActivity extends Activity {
                 String pattern = "MM-dd-yyyy";
                 SimpleDateFormat formatter = new SimpleDateFormat(pattern);
                 String key = formatter.format(date);
+                String day = key;
                 key = key.replace("-","");
                 //Toast.makeText(CalenderActivity.this, key, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(CalenderActivity.this, DayBreakDownActivity.class);
                 intent.putExtra("Day_Table", key);
+                intent.putExtra("Day_Selected",day );
                 startActivityForResult(intent, CONTENT_PRESENT);
 
             }

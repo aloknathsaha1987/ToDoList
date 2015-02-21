@@ -22,7 +22,6 @@
         android:id="@android:id/list"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:background= "#aaaaaa"
         />
 
 </RelativeLayout>

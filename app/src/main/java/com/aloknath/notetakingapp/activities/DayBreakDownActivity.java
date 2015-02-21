@@ -54,6 +54,7 @@ public class DayBreakDownActivity extends ListActivity {
         Intent intent = this.getIntent();
         day_Table_ID = "TableNo"+ intent.getStringExtra("Day_Table");
         dayId = day_Table_ID;
+        getActionBar().setTitle(intent.getStringExtra("Day_Selected"));
 
         hourlyDataSource = new NotesDailyDataSource(this);
         found = hourlyDataSource.setTableName("TableNo"+ intent.getStringExtra("Day_Table"));

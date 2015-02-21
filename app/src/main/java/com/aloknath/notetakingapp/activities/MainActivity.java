@@ -19,6 +19,8 @@ import android.widget.ListView;
 
 import com.aloknath.notetakingapp.GoogleLicense.GPSLicenseActivity;
 import com.aloknath.notetakingapp.R;
+import com.aloknath.notetakingapp.adapter.DayItemAdapter;
+import com.aloknath.notetakingapp.adapter.DrawerAdapter;
 import com.aloknath.notetakingapp.broadcast_receiver.MyReceiver;
 import com.aloknath.notetakingapp.data_preferences.NoteItem;
 import com.aloknath.notetakingapp.database.DateDataSource;
@@ -45,7 +47,7 @@ public class MainActivity extends ListActivity {
     private String mActivityTitle;
 
     private ListView mDrawerList;
-    private ArrayAdapter<String> mAdapter;
+    private DrawerAdapter mAdapter;
     private PendingIntent pendingIntent;
     private Context context;
 
@@ -165,7 +167,7 @@ public class MainActivity extends ListActivity {
 
     private void addDrawerItems() {
         String[] osArray = { "Calender", "Week's Schedule" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mAdapter = new DrawerAdapter(this, R.layout.drawer_layout, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
 
@@ -227,7 +229,7 @@ public class MainActivity extends ListActivity {
         });
 
 
-        ArrayAdapter<NoteItem> adapter = new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
+        DayItemAdapter adapter = new DayItemAdapter(this, R.layout.list_item_layout, notesList);
         setListAdapter(adapter);
     }
 
