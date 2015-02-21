@@ -51,7 +51,7 @@ public class NotifyService extends Service {
 
                 Notification notification = new Notification.Builder(NotifyService.this)
                         .setContentTitle(bundle.getString("title"))
-                        .setContentText(bundle.getString("description"))
+                        .setContentText(bundle.getString("time"))
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentIntent(contentIntent)
                         .setSound(sound)

@@ -32,6 +32,7 @@ public class CalenderActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calender_view);
         getActionBar().setDisplayHomeAsUpEnabled(true);
